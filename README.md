@@ -1,5 +1,7 @@
 # Automated-Household-Inventory-Intelligent-Consumption-Analytics-System-HI-CAS-
 '''The Automated Household Inventory &; Intelligent Consumption Analytics System (HI-CAS) uses IoT and AI to track items, analyze usage patterns, predict needs, reduce waste, and automate household inventory management efficiently.'''
+
+
 class Item:
     def __init__(self, item_id, name, quantity, threshold, price):
         self.item_id = item_id
