@@ -1,14 +1,6 @@
-"""
-HI-CAS: Automated Household Inventory & Consumption Analytics System
-
-This program helps track household inventory, monitor usage,
-and predict future consumption using simple analytics.
-"""
-
 class Item:
-    """Represents a household inventory item."""
 
-    def __init__(self, item_id: int, name: str, quantity: int, threshold: int, price: float):
+    def __init__(self, item_id, name, quantity, threshold, price):
         self.item_id = item_id
         self.name = name
         self.quantity = quantity
@@ -17,118 +9,92 @@ class Item:
         self.total_used = 0
         self.days_tracked = 0
 
-    def __str__(self):
-        return (
-            f"ID: {self.item_id}\n"
-            f"Name: {self.name}\n"
-            f"Quantity: {self.quantity}\n"
-            f"Threshold: {self.threshold}\n"
-            f"Price: ${self.price:.2f}"
-        )
 
-
-# Global inventory storage
 inventory = {}
 
 
 def add_item():
-    """Add a new item to inventory."""
-    try:
-        item_id = int(input("Enter Item ID: "))
-        if item_id in inventory:
-            print("⚠ Item ID already exists!")
-            return
 
-        name = input("Enter Item Name: ")
-        quantity = int(input("Enter Quantity: "))
-        threshold = int(input("Enter Threshold: "))
-        price = float(input("Enter Price: "))
+    item_id = int(input("Enter Item ID: "))
+    name = input("Enter Item Name: ")
+    quantity = int(input("Enter Quantity: "))
+    threshold = int(input("Enter Threshold: "))
+    price = float(input("Enter Price: "))
 
-        inventory[item_id] = Item(item_id, name, quantity, threshold, price)
-        print("✅ Item added successfully")
-
-    except ValueError:
-        print("❌ Invalid input. Please enter correct data types.")
+    inventory[item_id] = Item(item_id, name, quantity, threshold, price)
+    print("Item added successfully")
 
 
 def view_items():
-    """Display all inventory items."""
+
     if not inventory:
-        print("📭 No items found")
+        print("No items found")
         return
 
-    print("\n--- INVENTORY LIST ---")
     for item in inventory.values():
-        print(item)
-        print("-" * 25)
+        print("\nID:", item.item_id)
+        print("Name:", item.name)
+        print("Quantity:", item.quantity)
+        print("Threshold:", item.threshold)
+        print("Price:", item.price)
 
 
 def consume_item():
-    """Record item consumption."""
-    try:
-        item_id = int(input("Enter Item ID: "))
 
-        if item_id not in inventory:
-            print("❌ Item not found")
-            return
+    item_id = int(input("Enter Item ID: "))
 
-        qty = int(input("Enter quantity used: "))
-        item = inventory[item_id]
+    if item_id not in inventory:
+        print("Item not found")
+        return
 
-        if qty > item.quantity:
-            print("❌ Not enough stock")
-            return
+    qty = int(input("Enter quantity used: "))
+    item = inventory[item_id]
 
-        item.quantity -= qty
-        item.total_used += qty
-        item.days_tracked += 1
+    if qty > item.quantity:
+        print("Not enough stock")
+        return
 
-        print("✅ Consumption recorded")
+    item.quantity -= qty
+    item.total_used += qty
+    item.days_tracked += 1
 
-        if item.quantity <= item.threshold:
-            print("⚠ LOW STOCK ALERT!")
+    print("Consumption recorded")
 
-    except ValueError:
-        print("❌ Invalid input")
+    if item.quantity <= item.threshold:
+        print("⚠ Low Stock Alert!")
 
 
 def analytics():
-    """Analyze usage and predict future requirements."""
-    try:
-        item_id = int(input("Enter Item ID: "))
 
-        if item_id not in inventory:
-            print("❌ Item not found")
-            return
+    item_id = int(input("Enter Item ID: "))
 
-        item = inventory[item_id]
+    if item_id not in inventory:
+        print("Item not found")
+        return
 
-        if item.days_tracked == 0:
-            print("📊 No usage data available")
-            return
+    item = inventory[item_id]
 
-        avg_usage = item.total_used / item.days_tracked
-        future_days = int(input("Enter future days to predict: "))
-        predicted = avg_usage * future_days
+    if item.days_tracked == 0:
+        print("No usage data available")
+        return
 
-        print("\n--- ANALYTICS REPORT ---")
-        print(f"Average Daily Usage: {avg_usage:.2f}")
-        print(f"Predicted Requirement: {predicted:.2f}")
+    avg = item.total_used / item.days_tracked
+    future_days = int(input("Enter future days to predict: "))
+    predicted = avg * future_days
 
-    except ValueError:
-        print("❌ Invalid input")
+    print("Average Daily Usage:", round(avg, 2))
+    print("Predicted Requirement:", round(predicted, 2))
 
 
 def main():
-    """Main menu loop."""
+
     while True:
-        print("\n========== HI-CAS MENU ==========")
+        print("\n--- HI-CAS MENU ---")
         print("1. Add Item")
         print("2. View Items")
         print("3. Record Consumption")
         print("4. Analytics")
         print("5. Exit")
-        print("================================")
 
         choice = input("Enter choice: ")
 
@@ -141,11 +107,12 @@ def main():
         elif choice == '4':
             analytics()
         elif choice == '5':
-            print("👋 Exiting system...")
+            print("Exiting...")
             break
         else:
-            print("❌ Invalid choice. Try again.")
+            print("Invalid choice")
 
 
 if __name__ == "__main__":
+
     main()
